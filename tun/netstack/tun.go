@@ -52,6 +52,12 @@ type netTun struct {
 
 type Net netTun
 
+// Stack is the gVisor network stack behind the tunnel, for settings this
+// package does not make, such as TCP's congestion control and buffer sizes.
+func (net *Net) Stack() *stack.Stack {
+	return net.stack
+}
+
 func CreateNetTUN(localAddresses, dnsServers []netip.Addr, mtu int) (tun.Device, *Net, error) {
 	opts := stack.Options{
 		NetworkProtocols:   []stack.NetworkProtocolFactory{ipv4.NewProtocol, ipv6.NewProtocol},
